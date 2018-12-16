@@ -1,2 +1,5 @@
 *.png filter=lfs diff=lfs merge=lfs -text
 *.ckpt.* filter=lfs diff=lfs merge=lfs -text
+*.pth filter=lfs diff=lfs merge=lfs -text
+models/L1_300_epochs/net.pth filter=lfs diff=lfs merge=lfs -text
+models/L1_lower_learning_rate/net.pth filter=lfs diff=lfs merge=lfs -text
