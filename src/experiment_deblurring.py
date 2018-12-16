@@ -160,6 +160,69 @@ def optimal_DNCNN_experiment_e():
     alpha_data = 23.0
     alpha_tv = 0.0
 
+@elemental_ingredient.named_config
+def optimal_Lipschitz_experiment_a():
+    """
+    Updated experimental configuration.
+    """
+    # pylint:disable=unused-variable
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
+    sigma = 1.0
+    alpha_data = 2.0
+    alpha_tv = 0.0
+
+
+@elemental_ingredient.named_config
+def optimal_Lipschitz_experiment_b():
+    """
+    Updated experimental configuration.
+    """
+    # pylint:disable=unused-variable
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
+    sigma = 1.0
+    alpha_data = 75.0
+    alpha_tv = 0.0
+
+
+@elemental_ingredient.named_config
+def optimal_Lipschitz_experiment_c():
+    """
+    Updated experimental configuration.
+    """
+    # pylint:disable=unused-variable
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
+    sigma = 1.0
+    alpha_data = 4.0
+    alpha_tv = 0.0
+
+
+@elemental_ingredient.named_config
+def optimal_Lipschitz_experiment_d():
+    """
+    Updated experimental configuration.
+    """
+    # pylint:disable=unused-variable
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
+    sigma = 1.0
+    alpha_data = 73.0
+    alpha_tv = 0.0
+
+
+@elemental_ingredient.named_config
+def optimal_Lipschitz_experiment_e():
+    """
+    Updated experimental configuration.
+    """
+    # pylint:disable=unused-variable
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
+    sigma = 1.0
+    alpha_data = 23.0
+    alpha_tv = 0.0
 
 ##
 ## Grid search
@@ -362,7 +425,7 @@ def main(experiment_name, image_name, elemental, _log):
     f, img, kernel_img, crop = load_deblurring_grey_data(experiment_name,
                                                          image_name)
 
-    cnn_func = init_cnn_func() if elemental['denoising_prior'] == 'CNN' else None
+    cnn_func = init_cnn_func() if elemental['denoising_prior'] in ['CNN', 'PyCNN'] else None
     metric = init_metric(img, pad=(crop, crop))
     u = solver(f, kernel_img, metric, cnn_func)
 

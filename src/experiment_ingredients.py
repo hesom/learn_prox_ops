@@ -24,6 +24,7 @@ from proximal.utils.utils import CUDA_AVAILABLE, Impl
 from proximal.utils.metrics import psnr_metric, ssim_metric
 
 from tf_solver import Deployer, FLAGS
+from pytorch_solver import PytorchDeployer
 from utilities import pickle_load_all_to_list
 
 
@@ -78,7 +79,7 @@ def elemental_config():
     print_config = True
     implem = 'numpy' # ["halide", "numpy"]
     show_plot = False
-    denoising_prior = 'CNN' # ["CNN", "NLM", "BM3D"]
+    denoising_prior = 'CNN' # ["PyCNN", "CNN", "NLM", "BM3D"]
     cnn_model_path = "" # "XXX/model.ckpt"
 
     patch_size = 4
@@ -139,6 +140,8 @@ def init_denoising_prior(u, cnn_func, denoising_prior, sigma,
     """
     if denoising_prior == 'CNN':
         return px.prox_black_box(u, cnn_func, alpha=alpha_denoising)
+    elif denoising_prior == 'PyCNN':
+        return px.prox_black_box(u, cnn_func, alpha=alpha_denoising)
     elif denoising_prior == 'NLM':
         return px.patch_NLM(u,
                             alpha=alpha_denoising,
@@ -159,7 +162,7 @@ def init_denoising_prior(u, cnn_func, denoising_prior, sigma,
 
 
 @elemental_ingredient.capture
-def init_cnn_func(cnn_model_path, device_name, channels, _log):
+def init_cnn_func(cnn_model_path, device_name, channels, denoising_prior, _log):
     """
     Initializes the denoising CNN function which reduces the overhead during
     grid searches.
@@ -182,11 +185,18 @@ def init_cnn_func(cnn_model_path, device_name, channels, _log):
     FLAGS.device_name = device_name
     FLAGS.model_path = cnn_model_path
     FLAGS.channels = channels
-    nn_deployer = Deployer(FLAGS)
+    if denoising_prior == 'CNN':
+        nn_deployer = Deployer(FLAGS)
+    else:
+        nn_deployer = PytorchDeployer(layers=17, modelPath=cnn_model_path)
 
     def cnn(x):
         if len(x.shape) == 2:
-            x = x[np.newaxis, ..., np.newaxis]
+            if denoising_prior == 'CNN':
+                x = x[np.newaxis, ..., np.newaxis]
+            else:
+                x = np.expand_dims(x, 0)
+                x = np.expand_dims(x, 1)
         elif len(x.shape) == 3:
             # x = x[np.newaxis, ...].transpose((3, 1, 2, 0))
             # res = nn_deployer.deploy(x)['output_clipped']
@@ -195,8 +205,10 @@ def init_cnn_func(cnn_model_path, device_name, channels, _log):
         else:
             _log.error('No valid data dimension.')
             exit()
-
-        res = np.squeeze(nn_deployer.deploy(x)['output_clipped'])
+        if denoising_prior == 'CNN':
+            res = np.squeeze(nn_deployer.deploy(x)['output_clipped'])
+        else:
+            res = np.squeeze(nn_deployer.deploy(x))
         return res
 
     return cnn

@@ -21,8 +21,6 @@ python-dateutil==2.6.1
 pytz==2017.2
 PyWavelets==0.5.2
 sacred==0.7.0
-scikit-image==0.13.0
-scipy==0.19.1
 six==1.10.0
 tabulate==0.7.7
 tensorflow-tensorboard==0.1.5
