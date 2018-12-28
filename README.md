@@ -7,7 +7,7 @@ Additionally we provide a TensorFlow implementation of the denoising convolution
 Installation
 -------------------
 1. Install [git-lfs](https://github.com/git-lfs/git-lfs) for pulling the model and data files with the repository
-2. `git clone git@github.com:tum-vision/learn_prox_ops.git`
+2. `git clone git@github.com:hesom/learn_prox_ops.git`
 3. Install the following packages for Python 3.6:
     1. `pip3 install -r requirements.txt`
     2. ProxImaL: `pip3 install git+https://github.com/timmeinhardt/ProxImaL@learn_prox_ops`
