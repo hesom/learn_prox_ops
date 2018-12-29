@@ -169,7 +169,7 @@ def optimal_Lipschitz_experiment_a():
     denoising_prior = 'PyCNN'
     cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
     sigma = 1.0
-    alpha_data = 2.0
+    alpha_data = 5.0
     alpha_tv = 0.0
 
 
@@ -182,7 +182,7 @@ def optimal_Lipschitz_experiment_b():
     denoising_prior = 'PyCNN'
     cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
     sigma = 1.0
-    alpha_data = 75.0
+    alpha_data = 150.0
     alpha_tv = 0.0
 
 
@@ -195,7 +195,7 @@ def optimal_Lipschitz_experiment_c():
     denoising_prior = 'PyCNN'
     cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
     sigma = 1.0
-    alpha_data = 4.0
+    alpha_data = 8.0
     alpha_tv = 0.0
 
 
@@ -208,7 +208,7 @@ def optimal_Lipschitz_experiment_d():
     denoising_prior = 'PyCNN'
     cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
     sigma = 1.0
-    alpha_data = 73.0
+    alpha_data = 150.0
     alpha_tv = 0.0
 
 
@@ -221,7 +221,7 @@ def optimal_Lipschitz_experiment_e():
     denoising_prior = 'PyCNN'
     cnn_model_path = 'models/L1_lower_learning_rate/net.pth'
     sigma = 1.0
-    alpha_data = 23.0
+    alpha_data = 55.0
     alpha_tv = 0.0
 
 ##
@@ -422,27 +422,32 @@ def main(experiment_name, image_name, elemental, _log):
     if experiment_name is None and image_name is not None:
         _log.error("Specify experiment_name for image_name.")
         exit()
-    f, img, kernel_img, crop = load_deblurring_grey_data(experiment_name,
-                                                         image_name)
 
+    images = ['barbara', 'boat', 'cameraman', 'couple', 'fingerprint', 'hill', 'house', 'lena', 'man', 'montage', 'peppers']
+    s = 0
     cnn_func = init_cnn_func() if elemental['denoising_prior'] in ['CNN', 'PyCNN'] else None
-    metric = init_metric(img, pad=(crop, crop))
-    u = solver(f, kernel_img, metric, cnn_func)
+    for image_name in images:
+        f, img, kernel_img, crop = load_deblurring_grey_data(experiment_name,
+                                                            image_name)
 
-    print_config()
+        metric = init_metric(img, pad=(crop, crop))
+        u = solver(f, kernel_img, metric, cnn_func)
+        s = s + metric.eval(u)
+        print_config()
 
-    _log.info("Input PSNR: %f" % metric.eval(f))
-    _log.info("Final PSNR: %f" % metric.eval(u))
+        _log.info("Input PSNR: %f" % metric.eval(f))
+        _log.info("Final PSNR: %f" % metric.eval(u))
 
-    if elemental['show_plot']:
-        fig = plt.figure(figsize=(20, 5))
-        ax1 = fig.add_subplot(141)
-        ax2 = fig.add_subplot(142)
-        ax3 = fig.add_subplot(143)
-        ax1.set_title('image')
-        ax2.set_title('f')
-        ax3.set_title('our')
-        ax1.imshow(img, cmap='gray')
-        ax2.imshow(f, cmap='gray')
-        ax3.imshow(u, cmap='gray')
-        plt.show()
+        if elemental['show_plot']:
+            fig = plt.figure(figsize=(20, 5))
+            ax1 = fig.add_subplot(141)
+            ax2 = fig.add_subplot(142)
+            ax3 = fig.add_subplot(143)
+            ax1.set_title('image')
+            ax2.set_title('f')
+            ax3.set_title('our')
+            ax1.imshow(img, cmap='gray')
+            ax2.imshow(f, cmap='gray')
+            ax3.imshow(u, cmap='gray')
+            plt.show()
+    print(s / 11)

@@ -27,7 +27,7 @@ class PytorchDeployer(object):
         net = DnCNN(channels=1, num_of_layers=layers)
         device_ids = [0]
         model = nn.DataParallel(net, device_ids=device_ids)
-        model.load_state_dict(torch.load(modelPath))
+        model.load_state_dict(torch.load(modelPath, map_location=lambda storage, location: storage))
         model.eval()
         self.model = model.to(device=self.device)
 
