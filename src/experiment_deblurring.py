@@ -102,10 +102,10 @@ def optimal_DNCNN_experiment_a():
     Updated experimental configuration.
     """
     # pylint:disable=unused-variable
-    denoising_prior = 'CNN'
-    cnn_model_path = 'models/DNCNN__gaussian_0.02__40-40-1__128/model.ckpt'
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/pytorch/dncnn_official.pth'
     sigma = 1.0
-    alpha_data = 2.0
+    alpha_data = 16.0
     alpha_tv = 0.0
 
 
@@ -115,10 +115,10 @@ def optimal_DNCNN_experiment_b():
     Updated experimental configuration.
     """
     # pylint:disable=unused-variable
-    denoising_prior = 'CNN'
-    cnn_model_path = 'models/DNCNN__gaussian_0.02__40-40-1__128/model.ckpt'
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/pytorch/dncnn_official.pth'
     sigma = 1.0
-    alpha_data = 75.0
+    alpha_data = 300.0
     alpha_tv = 0.0
 
 
@@ -128,10 +128,10 @@ def optimal_DNCNN_experiment_c():
     Updated experimental configuration.
     """
     # pylint:disable=unused-variable
-    denoising_prior = 'CNN'
-    cnn_model_path = 'models/DNCNN__gaussian_0.02__40-40-1__128/model.ckpt'
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/pytorch/dncnn_official.pth'
     sigma = 1.0
-    alpha_data = 4.0
+    alpha_data = 16.0
     alpha_tv = 0.0
 
 
@@ -141,10 +141,10 @@ def optimal_DNCNN_experiment_d():
     Updated experimental configuration.
     """
     # pylint:disable=unused-variable
-    denoising_prior = 'CNN'
-    cnn_model_path = 'models/DNCNN__gaussian_0.02__40-40-1__128/model.ckpt'
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/pytorch/dncnn_official.pth'
     sigma = 1.0
-    alpha_data = 73.0
+    alpha_data = 300.0
     alpha_tv = 0.0
 
 
@@ -154,10 +154,10 @@ def optimal_DNCNN_experiment_e():
     Updated experimental configuration.
     """
     # pylint:disable=unused-variable
-    denoising_prior = 'CNN'
-    cnn_model_path = 'models/DNCNN__gaussian_0.02__40-40-1__128/model.ckpt'
+    denoising_prior = 'PyCNN'
+    cnn_model_path = 'models/pytorch/dncnn_official.pth'
     sigma = 1.0
-    alpha_data = 23.0
+    alpha_data = 100.0
     alpha_tv = 0.0
 
 @elemental_ingredient.named_config
@@ -450,4 +450,3 @@ def main(experiment_name, image_name, elemental, _log):
             ax2.imshow(f, cmap='gray')
             ax3.imshow(u, cmap='gray')
             plt.show()
-    print(s / 11)

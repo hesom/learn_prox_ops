@@ -43,4 +43,4 @@ class PytorchDeployer(object):
         """
         images = torch.Tensor(images).to(device=self.device)
         with torch.no_grad():
-            return torch.clamp(self.model(images), 0., 1.).cpu().numpy()
+            return torch.clamp(images - self.model(images), 0., 1.).cpu().numpy()
